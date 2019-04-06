@@ -2,7 +2,7 @@
 
 
 //1.	–азработать структуру Ђ∆ивотноеї(скорость передвижени€, тип(птица, скот, человек), цвет, характеристика(дл€ птицы Ц 
-//      скорость полета, вещественное число, дл€ скота Ц парнокопытное, логическа€ переменна€, дл€ человека Ц уровень IQ, 
+//      скорость полета, вещественное число, дл€ скота Ц парнокопытное, логическа€ переменна€, дл€ человека Ц уровень iq, 
 //      цела€ переменна€).
 //	–екомендации: характеристику реализовать как объединение, тип реализовать как перечислимый тип данных.
 //	ј)** —оздать экземпл€р структуры Ђ∆ивотноеї и реализовать дл€ него следующие функции :
@@ -27,15 +27,15 @@ enum Type
 
 union Characteristics
 {
-	double speed;
+	float speed;
 	bool artiodactyls;
-	int IQ;
+	int iq;
 };
 
 struct Animals
 {
 	int speed;
-	Type t;
+	Type type;
 	char color[15];
 	Characteristics chrct;
 	
@@ -43,16 +43,16 @@ struct Animals
 	{
 		cout << "  " << speed << "  " << "  " << color << "  ";
 		
-		if (t == human)
-			cout << "human  " << chrct.IQ << "  " << endl;
+		if (type == human)
+			cout << "human  " << chrct.iq << "  " << endl;
 		
-		else if (t == cattle && chrct.artiodactyls == 1)
+		else if (type == cattle && chrct.artiodactyls == 1)
 			cout << "cattle  " << "It is artiodactyl  " << endl;
 		
-		else if (t == cattle && chrct.artiodactyls == 0)
+		else if (type == cattle && chrct.artiodactyls == 0)
 			cout << "cattle  " << endl;
 		
-		else if (t == bird)
+		else if (type == bird)
 			cout << "bird  " << chrct.speed << "  " << endl;
 	}
 };
@@ -60,143 +60,169 @@ struct Animals
 
 int main()
 {
-	Animals *an;
-	int n;
 	ifstream fin("DataBase.txt");
+
+	Animals *an;
+	
+	int n;
 	fin >> n;
 	
 	an = new Animals[n];
-	char c[10];
+	char color[15];
 
-	for (int i = 0; i < n; i++)
+	if (!fin)
 	{
-		fin >> an[i].speed >> c >> an[i].color;
-		if (strcmp(c, "human") == 0)
-		{
-			an[i].t = human;
-			fin >> an[i].chrct.IQ;
-		}
-
-		else if (strcmp(c, "cattle") == 0)
-		{
-			an[i].t = cattle;
-			char c1[20];
-			fin >> c1;
-			if (strcmp(c1, "artiodactyl") == 0)
-				an[i].chrct.artiodactyls = true;
-			else if (strcmp(c1, "notartiodactyl") == 0)
-				an[i].chrct.artiodactyls = false;
-		}
-		else if (strcmp(c, "bird") == 0)
-		{
-			an[i].t = bird;
-			fin >> an[i].chrct.speed;
-		}
+		cout << "\n\n file \"DataBase.txt\" does not exist or empty \n\n";
 	}
-	cout << "Menu:\n" << "\n (1) - Edit animal \n (2) - Print full list \n (3) - Search animal by characteristic \n";
-	
-	int choose;
-	cin >> choose;
-	
-	switch (choose)
-	{
-	case 1:
+
+	else
 	{
 		for (int i = 0; i < n; i++)
 		{
-			cout << i + 1 << " - ";
-			an[i].print();
+			fin >> an[i].speed >> color >> an[i].color;
+			
+			if (strcmp(color, "human") == 0)		// поиск записи human,  через сранение ф. strcmp
+			{
+				an[i].type = human;
+				fin >> an[i].chrct.iq;
+			}
+
+			else if (strcmp(color, "cattle") == 0)	// поиск записи cattle,  через сранение ф. strcmp
+			{
+				an[i].type = cattle;
+				char color1[15];
+				fin >> color1;
+				
+				if (strcmp(color1, "artiodactyl") == 0) // поиск записи artiodactyl,  через сранение ф. strcmp
+					an[i].chrct.artiodactyls = true;
+				else if (strcmp(color1, "notartiodactyl") == 0)
+					an[i].chrct.artiodactyls = false;
+			}
+			
+			else if (strcmp(color, "bird") == 0) // поиск записи bird,  через сранение ф. strcmp
+			{
+				an[i].type = bird;
+				fin >> an[i].chrct.speed;
+			}
+			//else cout << "\n\n Nothing found \n\n";
 		}
-		cout << "Which animal do you want to edit? ";
-		int a;
-		cin >> a;
-		if (a >= 1 && a <= n)
-		{
-			cout << "Write the speed, type, color and characteristic of the animal: ";
-			cin >> an[a - 1].speed >> c;
-			if (strcmp(c, "human") == 0)
-			{
-				an[a - 1].t = human;
-				cin >> an[a - 1].color;
-				cin >> an[a - 1].chrct.IQ;
-			}
-			if (strcmp(c, "cattle") == 0)
-			{
-				an[a - 1].t = cattle;
-				cin >> an[a - 1].color;
-				char c1[20];
-				cin >> c1;
-				if (c1 == "artiodactyl")
-					an[a - 1].chrct.artiodactyls = true;
-				if (c1 == "notartiodactyl")
-					an[a - 1].chrct.artiodactyls = false;
-			}
-			if (strcmp(c, "bird") == 0)
-			{
-				an[a - 1].t = bird;
-				cin >> an[a - 1].color;
-				cin >> an[a - 1].chrct.speed;
-			}
-			for (int i = 0; i < n; i++)
-				an[i].print();
-		}
-		else cout << "Wrong number of animal";
-		break;
-	}
-	case 2:
-	{
-		for (int i = 0; i < n; i++)
-			an[i].print();
-		break;
-	}
-	case 3:
-	{
-		int a;
-		cout << "Which characteristic:\n1 - min speed\n2 - artiodactyl/notartiodactyl\n3 - min IQ\n";
-		cin >> a;
-		switch (a)
+		
+		cout << "Menu:\n" << "\n (1) - Edit animal \n (2) - Print full list \n (3) - Search animal by characteristic \n";
+		cout << "\n -> ";
+		int choose;
+		cin >> choose;
+
+		switch (choose)
 		{
 		case 1:
 		{
-			int sp;
-			cout << "min speed: ";
-			cin >> sp;
 			for (int i = 0; i < n; i++)
-				if (an[i].chrct.speed >= sp)
+			{
+				cout << i + 1 << " - ";
+				an[i].print();
+			}
+			cout << "\n Which animal do you want to edit? -> ";
+			int animal;
+			cin >> animal;
+			if (animal >= 1 && animal <= n)
+			{
+				cout << "\n Write the speed, type, color and characteristic of the animal: ";
+				cin >> an[animal - 1].speed >> color;
+				
+				if (strcmp(color, "human") == 0)
+				{
+					an[animal - 1].type = human;
+					cin >> an[animal - 1].color;
+					cin >> an[animal - 1].chrct.iq;
+				}
+				
+				if (strcmp(color, "cattle") == 0)
+				{
+					an[animal - 1].type = cattle;
+					cin >> an[animal - 1].color;
+					char color1[20];
+					cin >> color1;
+					if (color1 == "artiodactyl")
+						an[animal - 1].chrct.artiodactyls = true;
+					if (color1 == "notartiodactyl")
+						an[animal - 1].chrct.artiodactyls = false;
+				}
+				
+				if (strcmp(color, "bird") == 0)
+				{
+					an[animal - 1].type = bird;
+					cin >> an[animal - 1].color;
+					cin >> an[animal - 1].chrct.speed;
+				}
+				
+				for (int i = 0; i < n; i++)
 					an[i].print();
+			}
+			else cout << "\n\n Wrong number of animal \n\n";
 			break;
 		}
+		
 		case 2:
 		{
-			int art;
-			cout << "1 - artiodactyl\n2 - not artiodactyl\n";
-			cin >> art;
-			if (art == 1)
-			{
-				for (int i = 0; i < n; i++)
-					if (an[i].chrct.artiodactyls == true)
-						an[i].print();
-			}
-			if (art == 2)
-			{
-				for (int i = 0; i < n; i++)
-					if (an[i].chrct.artiodactyls == false)
-						an[i].print();
-			}
+			for (int i = 0; i < n; i++)
+				an[i].print();
 			break;
 		}
+		
 		case 3:
 		{
-			int IQ;
-			cout << "min IQ: ";
-			cin >> IQ;
-			for (int i = 0; i < n; i++)
-				if (an[i].chrct.IQ >= IQ)
-					an[i].print();
-			break;
+			int character;
+			cout << "Which characteristic:\n (1) - min speed \n (2) - artiodactyl/notartiodactyl \n (3) - min IQ \n";
+			cin >> character;
+			switch (character)
+			{
+			
+			case 1:
+			{
+				int speed;
+				cout << "min speed: ";
+				cin >> speed;
+				for (int i = 0; i < n; i++)
+					if (an[i].chrct.speed >= speed)
+						an[i].print();
+				break;
+			}
+			
+			case 2:
+			{
+				int artiodactyl;
+				cout << "\n (1) - artiodactyl \n (2) - not artiodactyl \n";
+				cin >> artiodactyl;
+				
+				if (artiodactyl == 1)
+				{
+					for (int i = 0; i < n; i++)
+						if (an[i].chrct.artiodactyls == true)
+							an[i].print();
+				}
+				if (artiodactyl == 2)
+				{
+					for (int i = 0; i < n; i++)
+						if (an[i].chrct.artiodactyls == false)
+							an[i].print();
+				}
+				break;
+			}
+			
+			case 3:
+			{
+				int iq;
+				cout << "min IQ: ";
+				cin >> iq;
+
+				for (int i = 0; i < n; i++)
+					if (an[i].chrct.iq >= iq)
+						an[i].print();
+				break;
+			}
+			}
 		}
 		}
-	}
 	}
 	system("pause");
 }
