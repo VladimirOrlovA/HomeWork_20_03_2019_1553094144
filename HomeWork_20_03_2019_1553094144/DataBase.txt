@@ -1,3 +1,9 @@
-1 bird
-2 human
-3 cattle
+6 human black 105
+4 human yellow 80
+8 human white 120
+12 cattle green artiodactyl
+28 cattle grey nonartiodactyl
+31 cattle white nonartiodactyl
+16 bird red 50
+18 bird black 45
+21 bird blue 25

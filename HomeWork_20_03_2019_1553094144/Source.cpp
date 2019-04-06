@@ -68,7 +68,7 @@ int main()
 	fin >> n;
 	
 	an = new Animals[n];
-	char color[15];
+	char form[15];
 
 	if (!fin)
 	{
@@ -79,32 +79,31 @@ int main()
 	{
 		for (int i = 0; i < n; i++)
 		{
-			fin >> an[i].speed >> color >> an[i].color;
+			fin >> an[i].speed >> form >> an[i].color;
 			
-			if (strcmp(color, "human") == 0)		// поиск записи human,  через сранение ф. strcmp
+			if (strcmp(form, "human") == 0)		// поиск записи human,  через сравнение ф. strcmp
 			{
 				an[i].type = human;
 				fin >> an[i].chrct.iq;
 			}
 
-			else if (strcmp(color, "cattle") == 0)	// поиск записи cattle,  через сранение ф. strcmp
+			else if (strcmp(form, "cattle") == 0)	// поиск записи cattle,  через сравнение ф. strcmp
 			{
 				an[i].type = cattle;
-				char color1[15];
-				fin >> color1;
+				char form1[20];
+				fin >> form1;
 				
-				if (strcmp(color1, "artiodactyl") == 0) // поиск записи artiodactyl,  через сранение ф. strcmp
+				if (strcmp(form1, "artiodactyl") == 0) // поиск записи artiodactyl,  через сравнение ф. strcmp
 					an[i].chrct.artiodactyls = true;
-				else if (strcmp(color1, "notartiodactyl") == 0)
+				else if (strcmp(form1, "notartiodactyl") == 0)
 					an[i].chrct.artiodactyls = false;
 			}
 			
-			else if (strcmp(color, "bird") == 0) // поиск записи bird,  через сранение ф. strcmp
+			else if (strcmp(form, "bird") == 0) // поиск записи bird,  через сравнение ф. strcmp
 			{
 				an[i].type = bird;
 				fin >> an[i].chrct.speed;
 			}
-			//else cout << "\n\n Nothing found \n\n";
 		}
 		
 		cout << "Menu:\n" << "\n (1) - Edit animal \n (2) - Print full list \n (3) - Search animal by characteristic \n";
@@ -127,28 +126,28 @@ int main()
 			if (animal >= 1 && animal <= n)
 			{
 				cout << "\n Write the speed, type, color and characteristic of the animal: ";
-				cin >> an[animal - 1].speed >> color;
+				cin >> an[animal - 1].speed >> form;
 				
-				if (strcmp(color, "human") == 0)
+				if (strcmp(form, "human") == 0)
 				{
 					an[animal - 1].type = human;
 					cin >> an[animal - 1].color;
 					cin >> an[animal - 1].chrct.iq;
 				}
 				
-				if (strcmp(color, "cattle") == 0)
+				if (strcmp(form, "cattle") == 0)
 				{
 					an[animal - 1].type = cattle;
 					cin >> an[animal - 1].color;
-					char color1[20];
-					cin >> color1;
-					if (color1 == "artiodactyl")
+					char form1[20];
+					cin >> form1;
+					if (form1 == "artiodactyl")
 						an[animal - 1].chrct.artiodactyls = true;
-					if (color1 == "notartiodactyl")
+					if (form1 == "notartiodactyl")
 						an[animal - 1].chrct.artiodactyls = false;
 				}
 				
-				if (strcmp(color, "bird") == 0)
+				if (strcmp(form, "bird") == 0)
 				{
 					an[animal - 1].type = bird;
 					cin >> an[animal - 1].color;
@@ -216,7 +215,7 @@ int main()
 				cin >> iq;
 
 				for (int i = 0; i < n; i++)
-					if (an[i].chrct.iq >= iq)
+					if (an[i].chrct.iq <= iq)
 						an[i].print();
 				break;
 			}
